@@ -1,0 +1,90 @@
+<div class="interview-page container">
+  <aside class="sidebar card cv-card">
+    <h3 class="muted">Upload your CV</h3>
+    <p class="small muted">Supported: .pdf, .docx</p>
+    <input class="file-input" type="file" (change)="onCVSelected($event)" accept=".pdf,.docx">
+
+    <div *ngIf="cvUploading" class="status">Processing CV…</div>
+
+    <div *ngIf="cvSummary" class="cv-summary">
+      <h4>CV Summary</h4>
+      <pre>{{ cvSummary }}</pre>
+    </div>
+  </aside>
+
+  <main class="main card interview-card">
+    <header class="main-header">
+      <h2>Live Interview</h2>
+  <div class="meta">Question {{ currentQuestionIndex + 1 }} / {{ generatedQuestions.length || 0 }}</div>
+    </header>
+
+    <section *ngIf="currentQuestion && !interviewFinished" class="question-section">
+      <p class="question-text">{{ currentQuestion }}</p>
+
+      <div *ngIf="generatedQuestions.length > 0" class="generated-question">
+        <h4 class="muted">Current prompt</h4>
+        <p class="prompt">{{ generatedQuestions[currentQuestionIndex] }}</p>
+
+        <div class="button-row">
+          <button class="btn" (click)="playCurrentQuestion()" [disabled]="recording || questionPlaying">🔊 Read</button>
+          <button class="btn" (click)="startRecording()" [disabled]="recording || questionPlaying">🎥 Record</button>
+        </div>
+      </div>
+
+      <div class="video-wrap">
+        <video id="preview" class="video-preview" autoplay muted></video>
+      </div>
+
+      <div class="button-row" style="margin-top:12px;">
+        <button class="btn start" (click)="startRecording()" [disabled]="recording">Start</button>
+        <button class="btn stop" (click)="stopRecording()" [disabled]="!recording">Stop</button>
+        <button class="btn next" (click)="nextQuestion()" [disabled]="recording">Next</button>
+      </div>
+
+      <section *ngIf="facialResult || transcriptionResult" class="results-card">
+        <h4>Analysis Results</h4>
+
+        <div *ngIf="facialResult" class="result-block">
+          <strong>Facial Analysis</strong>
+          <pre>{{ facialResult | json }}</pre>
+        </div>
+
+        <div *ngIf="transcriptionResult" class="result-block">
+          <strong>Transcription</strong>
+          <p class="transcription">{{ transcriptionResult }}</p>
+        </div>
+
+        <div class="feedback-area">
+          <h4 class="muted">Feedback</h4>
+
+          <div *ngIf="feedbackLoading" class="status muted">Generating feedback…</div>
+
+          <div *ngIf="feedbackText && !feedbackLoading" class="feedback-text">
+            <div class="feedback-box">
+              <strong>Summary</strong>
+              <p>{{ feedbackText }}</p>
+            </div>
+
+            <div class="feedback-controls">
+              <button class="btn" (click)="playFeedback()" [disabled]="feedbackPlaying">▶ {{ feedbackPlaying ? 'Playing…' : 'Play' }}</button>
+              <button class="btn" (click)="playFeedback()" [disabled]="feedbackPlaying">🔁 Replay</button>
+            </div>
+          </div>
+
+          <div *ngIf="!feedbackText && !feedbackLoading" class="muted">Feedback will appear here after analysis.</div>
+        </div>
+      </section>
+    </section>
+
+    <section *ngIf="interviewFinished" class="completed-card">
+      <h3>Interview Completed 🎉</h3>
+      <p>Thanks — your session is complete.</p>
+
+      <div *ngIf="feedbackText" class="final-feedback">
+        <h4>Final Feedback</h4>
+        <pre>{{ feedbackText }}</pre>
+        <div style="margin-top:8px;"><button class="btn" (click)="playFeedback()" [disabled]="feedbackPlaying">{{ feedbackPlaying ? 'Playing…' : 'Play Feedback' }}</button></div>
+      </div>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+* { box-sizing: border-box; }
+html,body { height: 100%; margin: 0; }
+body {
+	font-family: Inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background: linear-gradient(180deg,#071028,#0f1724);
+	color: #e6eef8;
+	-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+}
+
+/* Utility helpers */
+.container { max-width: 1200px; margin: 0 auto; }
+.text-muted { color: rgba(230,238,248,0.7); }
+
